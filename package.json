@@ -1,0 +1,26 @@
+{
+  "name": "chatapp_2",
+  "version": "1.0.0",
+  "description": "A chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SechabaNtshehi/chatApp_BE_2.git"
+  },
+  "author": "Mokgome Sechaba Ntshehi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SechabaNtshehi/chatApp_BE_2/issues"
+  },
+  "homepage": "https://github.com/SechabaNtshehi/chatApp_BE_2#readme",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.0.5"
+  }
+}

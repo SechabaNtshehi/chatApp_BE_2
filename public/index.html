@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A test page for testing application logic">
+        <meta name="author" content="Mokgome Sechaba Ntshehi">
+        <title>Test Site</title>
+    </head>
+    <body>
+        <h1>Hey</h1>
+
+        <h1>Sign in</h1>
+        <form>
+            <label for="username">Username</label>
+            <input type="text" id="username">
+
+            <label for="password"> Password</label>
+            <input type="password" id="password">
+
+            <button id="registerBtn">Register</button>
+        </form>
+
+        <h1>Sign in</h1>
+        <form>
+            <label for="name">Username</label>
+            <input type="text" id="name">
+
+            <label for="pswd">Password</label>
+            <input type="password" id="pswd">
+
+            <button id="signinBtn">Sign in</button>
+        </form>
+
+        <script>
+            document.getElementById("registerBtn").addEventListener('click', (e)=>{
+                e.preventDefault()
+                const username_ = document.getElementById('username').value
+                const password_ = document.getElementById('password').value
+                if(!password_ || !username_){
+                    console.log("nnnah")
+                }
+                else{
+                    const userData = {
+                        username: username_,
+                        password: password_
+                    }
+
+                    fetch('http://localhost:5555/register',{
+                        method: 'POST',
+                        headers:{
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    })
+                    .then(data =>{
+                        console.log(data)
+                    })
+                }
+            })
+            
+            document.getElementById("signinBtn").addEventListener('click', (e)=>{
+                e.preventDefault()
+
+                const username_ = document.getElementById('name').value
+                const password_ = document.getElementById('pswd').value
+
+                if(!password_ || !username_){
+                    console.log("nnnah")
+                }
+
+                const data = {
+                    username: username_,
+                    password: password_
+                }
+
+                const options = {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)  
+                }
+
+                fetch('http://localhost:5555/sign-in', options)
+            })
+       </script>
+    </body>
+</html>
