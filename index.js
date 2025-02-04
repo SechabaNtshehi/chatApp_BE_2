@@ -58,13 +58,14 @@ app.post('/register', async(req, res, next) =>{
     }
 })
 
-app.post('/sign-in', async (req, send, next)=>{
+app.post('/sign-in', async (req, res, next)=>{
     const {username, password} = req.body
 
     try{
         const result = await db.get(`SELECT password FROM users WHERE username = ?`, [username])
 
         if(!result){
+            console.log(result)
             res.status(401).send({
                 status: "error",
                 message: "Either username or password is incorrect"
@@ -74,12 +75,14 @@ app.post('/sign-in', async (req, send, next)=>{
             const passwordMatch = await bcrypt.compare(password, result.password)
             
             if(passwordMatch){
+                console.log(passwordMatch)
                 res.status(200).send({
                     status: "success",
                     message: "User confirmed"
                 })
             }
             else{
+                console.log(passwordMatch)
                 res.status(401).send({
                     status: "error",
                     message: "Either username or password is incorrect"

@@ -53,6 +53,7 @@
                         },
                         body: JSON.stringify(userData)
                     })
+                    .then(data => data.json())
                     .then(data =>{
                         console.log(data)
                     })
@@ -68,21 +69,26 @@
                 if(!password_ || !username_){
                     console.log("nnnah")
                 }
+                else{
+                    const data = {
+                        username: username_,
+                        password: password_
+                    }
 
-                const data = {
-                    username: username_,
-                    password: password_
+                    const options = {
+                        method: 'POST',
+                        headers:{
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)  
+                    }
+
+                    fetch('http://localhost:5555/sign-in', options)
+                    .then(data=> data.json())
+                    .then(data =>{
+                        console.log(data)
+                    })
                 }
-
-                const options = {
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)  
-                }
-
-                fetch('http://localhost:5555/sign-in', options)
             })
        </script>
     </body>
