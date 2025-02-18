@@ -1,9 +1,17 @@
 import express from 'express'
 import path from 'path'
+import cors from 'cors'
 import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import { v4 } from 'uuid'
 import bcrypt from 'bcrypt'
+
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+console.log(__dirname)
 
 const saltRounds = 10
 
@@ -24,11 +32,16 @@ await db.exec(`
 const app = express()
 const PORT = 5555
 
-app.use(express.static('./public/'))
+app.use(cors())
+app.use(express.static('public'))
 app.use(express.json())
 
 app.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
+app.get('/accounts', (req, res)=>{
+    res.sendFile(path.join(__dirname, 'public', 'accounts.html'))
 })
 
 app.listen(PORT, ()=>{
@@ -78,8 +91,9 @@ app.post('/sign-in', async (req, res, next)=>{
                 console.log(passwordMatch)
                 res.status(200).send({
                     status: "success",
-                    message: "User confirmed"
+                    message: "User confirmed",
                 })
+                // res.status(301).send(`/accounts`)
             }
             else{
                 console.log(passwordMatch)
