@@ -112,3 +112,10 @@ app.post('/sign-in', async (req, res, next)=>{
         })
     }
 })
+
+app.get('/all-accounts', async (req, res)=>{
+    console.log("Okay, lets goo")
+    const accounts = await db.all(`SELECT DISTINCT uuid, username FROM users`)
+
+    res.status(200).send(accounts)
+})

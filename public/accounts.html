@@ -7,10 +7,61 @@
         <meta name="author" content="Mokgome Sechaba Ntshehi">
         <title>Test Site</title>
     </head>
-    <body>
+    <body onload="loadAccounts()">
         <h1>Shall we list them?</h1>
-
+        <div id="accounts"></div>
         
+        <script>
 
+            function loadAccounts(){
+                const options = {
+                    method: 'GET',
+                }
+
+                console.log('Executing')
+
+                fetch('http://localhost:5555/all-accounts')
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data)
+                    data.forEach(element => {
+                        const container = document.createElement('div')
+                        container.classList.add('account')
+
+                        const username_ = document.createElement('h2')
+                        const innerText = document.createTextNode(element.username)
+                        username_.appendChild(innerText)
+
+                        const uuid = document.createElement('p')
+                        const text = document.createTextNode(element.uuid)
+                        uuid.appendChild(text)
+
+                        container.appendChild(username_)
+                        container.appendChild(uuid)
+                        
+                        const accounts_list = document.getElementById('accounts')
+                        accounts_list.appendChild(container)
+                        accounts_list.appendChild(document.createElement('br'))
+
+                    });
+                })
+                .then(()=>{
+                    const accounts = document.getElementById('accounts')
+                    const accountsList = accounts.getElementsByClassName('account')
+                    console.log(accountsList)
+                    
+                    for(let i = 0; i < accountsList.length; i++){
+                        accountsList[i].addEventListener('click', function(){
+                            for(const child of this.children){
+                                console.log(child.innerText)
+                            }
+                        })  
+                    }
+                })
+            }
+
+
+
+        </script>
     </body>
 </html>
