@@ -87,6 +87,9 @@
                     .then(data=> data.json())
                     .then(data =>{
                         if(data.status === 'success'){
+                            document.cookie = `username=${data.username}`
+                            document.cookie = `uuid=${data.uuid}`
+                            console.log(data)
                             window.location.href = '/accounts'
                         }
                     })

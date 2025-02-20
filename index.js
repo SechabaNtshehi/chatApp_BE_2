@@ -20,12 +20,27 @@ const db = await open({
     driver: sqlite3.Database
 })
 
+const chatDB = await open({
+    filename: 'chats',
+    driver: sqlite3.Database
+})
+
 await db.exec(`
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uuid INTEGER UNIQUE,
         password TEXT,
         username TEXT UNIQUE
+    )    
+`)
+
+await chatDB.exec(`
+    CREATE TABLE IF NOT EXISTS chats(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chatid INTEGER,
+        uuid1 INTEGER,
+        uuid2 INTEGER
+        sent_at TEXT DEFAULT CURRENT_TIMESTAMP
     )    
 `)
 
@@ -53,10 +68,14 @@ app.post('/register', async(req, res, next) =>{
 
     try{
         const hash = await bcrypt.hash(password, saltRounds)
-        const uuid = v4()
-        const result_ = await db.run('INSERT INTO users (uuid, password, username) VALUES (?, ?, ?)', [uuid, hash, username])
+        const uuid_ = v4()
+        const result_ = await db.run('INSERT INTO users (uuid, password, username) VALUES (?, ?, ?)', [uuid_, hash, username])
 
-        res.status(200).json({result: result_})
+        res.status(200).json({
+            result: result_,
+            uuid: uuid_,
+            username: username
+        })
     }
     catch(e){
         if(e.errno === 19){
@@ -75,7 +94,7 @@ app.post('/sign-in', async (req, res, next)=>{
     const {username, password} = req.body
 
     try{
-        const result = await db.get(`SELECT password FROM users WHERE username = ?`, [username])
+        const result = await db.get(`SELECT DISTINCT password,uuid,username FROM users WHERE username = ?`, [username])
 
         if(!result){
             console.log(result)
@@ -92,8 +111,9 @@ app.post('/sign-in', async (req, res, next)=>{
                 res.status(200).send({
                     status: "success",
                     message: "User confirmed",
+                    username: result.username,
+                    uuid: result.uuid
                 })
-                // res.status(301).send(`/accounts`)
             }
             else{
                 console.log(passwordMatch)
